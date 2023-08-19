@@ -1,0 +1,4 @@
+mysql_host: 'localhost:3306'
+mysql_user: 'root'
+mysql_password: '1234'
+mysql_db: 'billdb'
