@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  billing-api:
+    build: 
+      context: ./billing-api
+      dockerfile: Dockerfile
+    expose:
+      - "5000"
+    ports:
+      - "5000:${PORT}"
+    volumes:
+      - ./billing-api/in/:/billing-microservice/in/
+    networks:
+      - billing_network
+      - green_network
+    depends_on:
+      billing-db:
+        condition: service_healthy
+
+  billing-db:
+    image: mysql:8
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - billingdb-data:/var/lib/mysql
+      - ./billingdb/billingdb.sql:/docker-entrypoint-initdb.d/billingdb.sql
+    networks:
+      - billing_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+networks:
+  green_network:
+  billing_network:
+
+volumes:
+  billingdb-data:
+  - ./billing-api/in/:/billing-microservice/in/
