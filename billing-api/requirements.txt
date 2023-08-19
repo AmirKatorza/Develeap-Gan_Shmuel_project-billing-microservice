@@ -1,0 +1,8 @@
+Flask==2.3.2
+SQLAlchemy==1.4.23
+Flask-SQLAlchemy==3.0.5
+mysql-connector-python==8.1.0
+pyyaml
+openpyxl==3.1.2
+requests
+pandas
